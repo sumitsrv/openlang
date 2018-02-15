@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">OpenLang</string>
     <string name="action_settings">Settings</string>
+    <string name="permission_message">This app needs to record audio and recognize your speech.</string>
+    <string name="listening">Listening…</string>
+    <string name="listen">Listen</string>
 </resources>

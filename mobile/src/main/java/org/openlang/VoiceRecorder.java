@@ -20,6 +20,7 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 
 /**
@@ -38,7 +39,7 @@ public class VoiceRecorder {
     private static final int ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
     private static final int AMPLITUDE_THRESHOLD = 1500;
-    private static final int SPEECH_TIMEOUT_MILLIS = 2000;
+    private static final int SPEECH_TIMEOUT_MILLIS = 1000;
     private static final int MAX_SPEECH_LENGTH_MILLIS = 30 * 1000;
 
     public static abstract class Callback {
@@ -176,6 +177,8 @@ public class VoiceRecorder {
      */
     private class ProcessVoice implements Runnable {
 
+        private static final String TAG = "ProcessVoice";
+
         @Override
         public void run() {
             while (true) {
@@ -217,6 +220,7 @@ public class VoiceRecorder {
                 if (s < 0) s *= -1;
                 s <<= 8;
                 s += Math.abs(buffer[i]);
+//                Log.i(TAG, String.valueOf(s));
                 if (s > AMPLITUDE_THRESHOLD) {
                     return true;
                 }

@@ -114,6 +114,7 @@ public class SpeechService extends Service {
         public void onNext(StreamingRecognizeResponse response) {
             String text = null;
             boolean isFinal = false;
+            Log.i(TAG, response.toString());
             if (response.getResultsCount() > 0) {
                 final StreamingRecognitionResult result = response.getResults(0);
                 isFinal = result.getIsFinal();
@@ -256,7 +257,7 @@ public class SpeechService extends Service {
                                 .setEncoding(RecognitionConfig.AudioEncoding.LINEAR16)
                                 .setSampleRateHertz(sampleRate)
                                 .build())
-                        .setInterimResults(true)
+                        .setInterimResults(false)
                         .setSingleUtterance(true)
                         .build())
                 .build());
@@ -305,11 +306,11 @@ public class SpeechService extends Service {
                                     .setSampleRateHertz(16000)
                                     .build())
                             .setAudio(RecognitionAudio.newBuilder()
-                                    .setContent(ByteString.readFrom(stream))
-                                    .build())
+                                     .setContent(ByteString.readFrom(stream))
+                                                         .build())
                             .build(),
                     mFileResponseObserver);
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.e(TAG, "Error loading the input", e);
         }
     }
