@@ -112,8 +112,4 @@ public class OrderedAlphabets extends SpeechFragment {
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
 }

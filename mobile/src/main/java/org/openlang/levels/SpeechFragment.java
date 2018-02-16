@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.style.TextAppearanceSpan;
 import android.util.Log;
 import android.widget.GridLayout;
 import android.widget.TextView;
@@ -38,18 +39,7 @@ public class SpeechFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        mSpeechService.addListener(mSpeechServiceListener);
-        startVoiceRecorder();
-
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        SpeechServiceAccessor speechServiceAccessor = (SpeechServiceAccessor) getActivity();
-        this.mSpeechService = speechServiceAccessor.getSpeechService();
-        this.mStatus = speechServiceAccessor.getStatusView();
     }
 
     @Override
@@ -60,11 +50,26 @@ public class SpeechFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        SpeechServiceAccessor speechServiceAccessor = (SpeechServiceAccessor) getActivity();
+        this.mSpeechService = speechServiceAccessor.getSpeechService();
+        this.mStatus = speechServiceAccessor.getStatusView();
+
+        mSpeechService.addListener(mSpeechServiceListener);
+        startVoiceRecorder();
+//        Log.i("SpeechFragment", "Create");
+
+        Log.i("SpeechFragment", "Resume");
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        stopVoiceRecorder();
+
+        // Stop Cloud Speech API
+        Log.i("SpeechFragment", "Destroy");
+        mSpeechService.removeListener(mSpeechServiceListener);
+        mSpeechService = null;
     }
 
     @Override
@@ -84,11 +89,6 @@ public class SpeechFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        stopVoiceRecorder();
-
-        // Stop Cloud Speech API
-        mSpeechService.removeListener(mSpeechServiceListener);
-        mSpeechService = null;
         super.onDestroy();
     }
 

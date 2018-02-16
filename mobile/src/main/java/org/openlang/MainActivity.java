@@ -115,10 +115,14 @@ public class MainActivity extends AppCompatActivity implements MessageDialogFrag
 
     @Override
     protected void onStop() {
-        unbindService(mServiceConnection);
         super.onStop();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(mServiceConnection);
+    }
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
