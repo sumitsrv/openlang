@@ -79,6 +79,10 @@ public class MainActivity extends AppCompatActivity implements MessageDialogFrag
         mStatus = (TextView) findViewById(R.id.status);
         fab = (FloatingActionButton)findViewById(R.id.fab);
 
+        setOnClickListenerToListenButton();
+    }
+
+    private void setOnClickListenerToListenButton() {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

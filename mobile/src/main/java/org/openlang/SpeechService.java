@@ -36,6 +36,7 @@ import com.google.cloud.speech.v1.RecognitionAudio;
 import com.google.cloud.speech.v1.RecognitionConfig;
 import com.google.cloud.speech.v1.RecognizeRequest;
 import com.google.cloud.speech.v1.RecognizeResponse;
+import com.google.cloud.speech.v1.SpeechContext;
 import com.google.cloud.speech.v1.SpeechGrpc;
 import com.google.cloud.speech.v1.SpeechRecognitionAlternative;
 import com.google.cloud.speech.v1.SpeechRecognitionResult;
@@ -221,6 +222,7 @@ public class SpeechService extends Service {
             language.append("-");
             language.append(country);
         }
+//        return "hi_IN";
         return language.toString();
     }
 
@@ -243,7 +245,7 @@ public class SpeechService extends Service {
      *
      * @param sampleRate The sample rate of the audio.
      */
-    public void startRecognizing(int sampleRate) {
+    public void startRecognizing(int sampleRate, List<String> speechContextStrings) {
         if (mApi == null) {
             Log.w(TAG, "API not ready. Ignoring the request.");
             return;
@@ -256,8 +258,12 @@ public class SpeechService extends Service {
                                 .setLanguageCode(getDefaultLanguageCode())
                                 .setEncoding(RecognitionConfig.AudioEncoding.LINEAR16)
                                 .setSampleRateHertz(sampleRate)
+                                .setMaxAlternatives(1)
+                                .addSpeechContexts(
+                                        SpeechContext.newBuilder().addAllPhrases(speechContextStrings).build()
+                                )
                                 .build())
-                        .setInterimResults(false)
+                        .setInterimResults(true)
                         .setSingleUtterance(true)
                         .build())
                 .build());

@@ -20,13 +20,12 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 
 /**
  * Continuously records audio and notifies the {@link VoiceRecorder.Callback} when voice (or any
  * sound) is heard.
- *
+ * <p>
  * <p>The recorded audio format is always {@link AudioFormat#ENCODING_PCM_16BIT} and
  * {@link AudioFormat#CHANNEL_IN_MONO}. This class will automatically pick the right sample rate
  * for the device. Use {@link #getSampleRate()} to get the selected value.</p>
@@ -39,7 +38,7 @@ public class VoiceRecorder {
     private static final int ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
     private static final int AMPLITUDE_THRESHOLD = 1500;
-    private static final int SPEECH_TIMEOUT_MILLIS = 1000;
+    private static final int SPEECH_TIMEOUT_MILLIS = 500;
     private static final int MAX_SPEECH_LENGTH_MILLIS = 30 * 1000;
 
     public static abstract class Callback {
@@ -76,10 +75,14 @@ public class VoiceRecorder {
 
     private final Object mLock = new Object();
 
-    /** The timestamp of the last time that voice is heard. */
+    /**
+     * The timestamp of the last time that voice is heard.
+     */
     private long mLastVoiceHeardMillis = Long.MAX_VALUE;
 
-    /** The timestamp when the current voice is started. */
+    /**
+     * The timestamp when the current voice is started.
+     */
     private long mVoiceStartedMillis;
 
     public VoiceRecorder(@NonNull Callback callback) {
@@ -88,7 +91,7 @@ public class VoiceRecorder {
 
     /**
      * Starts recording audio.
-     *
+     * <p>
      * <p>The caller is responsible for calling {@link #stop()} later.</p>
      */
     public void start() {
@@ -220,7 +223,6 @@ public class VoiceRecorder {
                 if (s < 0) s *= -1;
                 s <<= 8;
                 s += Math.abs(buffer[i]);
-//                Log.i(TAG, String.valueOf(s));
                 if (s > AMPLITUDE_THRESHOLD) {
                     return true;
                 }

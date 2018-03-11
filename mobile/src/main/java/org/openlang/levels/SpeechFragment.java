@@ -1,26 +1,30 @@
 package org.openlang.levels;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.style.TextAppearanceSpan;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
-import org.openlang.R;
 import org.openlang.SpeechService;
 import org.openlang.VoiceRecorder;
+
+import java.util.List;
 
 /**
  * Created by sumit on 30/01/18.
  */
 
-public class SpeechFragment extends Fragment {
+public abstract class SpeechFragment extends Fragment {
     protected SpeechService mSpeechService;
     protected SpeechService.Listener mSpeechServiceListener;
     protected VoiceRecorder mVoiceRecorder;
+
+    protected abstract void setSpeechContext();
+    protected abstract void setSpeechServiceListener();
 
     // Resource caches
     protected int mColorHearing;
@@ -28,7 +32,6 @@ public class SpeechFragment extends Fragment {
 
     // View references
     protected TextView mText;
-    protected TextView voiceText;
     protected GridLayout myGridLayout;
 
     private TextView mStatus;
@@ -53,12 +56,8 @@ public class SpeechFragment extends Fragment {
         SpeechServiceAccessor speechServiceAccessor = (SpeechServiceAccessor) getActivity();
         this.mSpeechService = speechServiceAccessor.getSpeechService();
         this.mStatus = speechServiceAccessor.getStatusView();
-
         mSpeechService.addListener(mSpeechServiceListener);
         startVoiceRecorder();
-//        Log.i("SpeechFragment", "Create");
-
-        Log.i("SpeechFragment", "Resume");
     }
 
     @Override
@@ -67,7 +66,6 @@ public class SpeechFragment extends Fragment {
         stopVoiceRecorder();
 
         // Stop Cloud Speech API
-        Log.i("SpeechFragment", "Destroy");
         mSpeechService.removeListener(mSpeechServiceListener);
         mSpeechService = null;
     }
@@ -97,6 +95,8 @@ public class SpeechFragment extends Fragment {
         super.onDetach();
     }
 
+    protected List<String> speechContextStrings;
+
     private final VoiceRecorder.Callback mVoiceCallback = new VoiceRecorder.Callback() {
         private static final String TAG = "VoiceRecorder";
 
@@ -105,7 +105,7 @@ public class SpeechFragment extends Fragment {
             Log.i(TAG, "Voice Start");
             showStatus(true);
             if (mSpeechService != null) {
-                mSpeechService.startRecognizing(mVoiceRecorder.getSampleRate());
+                mSpeechService.startRecognizing(mVoiceRecorder.getSampleRate(), speechContextStrings);
             }
         }
 

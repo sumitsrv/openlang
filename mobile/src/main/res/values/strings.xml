@@ -4,4 +4,6 @@
     <string name="permission_message">This app needs to record audio and recognize your speech.</string>
     <string name="listening">Listening…</string>
     <string name="listen">Listen</string>
+    <string name="ordered_alphabets">Ordered Alphabets</string>
+    <string name="textviewGrid">TextViewGrid</string>
 </resources>

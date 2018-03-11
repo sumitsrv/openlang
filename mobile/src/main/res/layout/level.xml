@@ -14,11 +14,10 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<LinearLayout
-    android:id="@+id/card"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_weight="1"
@@ -30,16 +29,18 @@
         android:layout_height="50dp"
         android:background="@color/cardview_light_background"
         android:gravity="center_horizontal|center_vertical"
-        android:text="Alphabets"
+        android:text="@string/ordered_alphabets"
+        android:textAlignment="center"
         android:textColor="@android:color/holo_blue_dark"
-        android:textSize="20dp" />
+        android:textSize="15sp" />
 
     <GridLayout
         android:id="@+id/canvas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="2"
-        android:rowCount="1">
+        android:columnCount="5"
+        android:rowCount="6"
+        android:visibility="visible">
     </GridLayout>
 
 </LinearLayout>
